@@ -1,0 +1,117 @@
+{
+  order authenticate before respond
+  order authorize before reverse_proxy
+
+  acme_dns digitalocean {env.DO_AUTH_TOKEN}
+
+  security {
+    oauth identity provider google {
+      realm google
+      driver google
+      client_id {env.GOOGLE_CLIENT_ID}
+      client_secret {env.GOOGLE_CLIENT_SECRET}
+      scopes openid email profile
+    }
+
+    authentication portal myportal {
+      crypto default token lifetime 3600
+      crypto key sign-verify {env.JWT_SHARED_KEY}
+      enable identity provider google
+      cookie domain {env.CADDY_DOMAIN}
+
+      ui {
+        links {
+          "My Identity" "/whoami" icon "las la-user"
+        }
+      }
+
+      transform user {
+        match realm google
+        action add role authp/user
+        ui link "Home Assistant" https://home.{$CADDY_DOMAIN}/ icon "las la-home"
+        ui link "Unifi" https://network.{$CADDY_DOMAIN}/ icon "las la-wifi"
+        ui link "Frigate" https://nvr.{$CADDY_DOMAIN}/ icon "las la-video"
+        ui link "Scrypted" https://scrypted.{$CADDY_DOMAIN}/ icon "las la-cogs"
+      }
+
+      transform user {
+        match realm google
+        match email {env.CADDY_ADMIN}
+        action add role authp/admin
+      }
+    }
+
+    authorization policy mypolicy {
+      set auth url https://auth.{$CADDY_DOMAIN}/oauth2/google
+      crypto key verify {env.JWT_SHARED_KEY}
+      allow roles authp/admin authp/user
+      validate bearer header
+      inject headers with claims
+    }
+  }
+}
+
+(auth) {
+  @remote_host_filter {
+    not remote_ip 192.168.1.101
+    not remote_ip 100.120.36.116
+    not remote_ip 192.168.1.94
+    not path /caddy-health-check
+  }
+
+  handle @remote_host_filter {
+    authorize with mypolicy
+  }
+}
+
+auth.{$CADDY_DOMAIN} {
+  encode gzip
+
+  respond /caddy-health-check 200
+
+  rewrite /cockpit /cockpit/
+
+  reverse_proxy /cockpit/* https://host.docker.internal:9090 {
+    transport http {
+      tls_insecure_skip_verify
+    }
+  }
+
+  authenticate with myportal
+}
+
+home.{$CADDY_DOMAIN} {
+  encode gzip
+
+  import auth
+
+  reverse_proxy {$HOME_ASSISTANT_UPSTREAM_HOST}
+}
+
+nvr.{$CADDY_DOMAIN} {
+  encode gzip
+
+  import auth
+
+  reverse_proxy {$FRIGATE_UPSTREAM_HOST}
+}
+
+scrypted.{$CADDY_DOMAIN} {
+  encode gzip
+
+  import auth
+
+  reverse_proxy {$SCRYPTED_UPSTREAM_HOST}
+}
+
+network.{$CADDY_DOMAIN} {
+  encode gzip
+
+  import auth
+
+  reverse_proxy {$UNIFI_UPSTREAM_HOST} {
+    transport http {
+      tls_insecure_skip_verify
+    }
+  }
+}
