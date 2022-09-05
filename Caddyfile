@@ -53,9 +53,8 @@
 
 (auth) {
   @remote_host_filter {
-    not remote_ip 192.168.1.101
-    not remote_ip 100.120.36.116
-    not remote_ip 192.168.1.94
+    not remote_ip 192.168.4.170
+    not remote_ip 192.168.1.124
     not path /caddy-health-check
   }
 
@@ -69,14 +68,6 @@ auth.{$CADDY_DOMAIN} {
 
   respond /caddy-health-check 200
 
-  rewrite /cockpit /cockpit/
-
-  reverse_proxy /cockpit/* https://host.docker.internal:9090 {
-    transport http {
-      tls_insecure_skip_verify
-    }
-  }
-
   authenticate with myportal
 }
 
@@ -85,7 +76,9 @@ home.{$CADDY_DOMAIN} {
 
   import auth
 
-  reverse_proxy {$HOME_ASSISTANT_UPSTREAM_HOST}
+  reverse_proxy https://{$HOME_ASSISTANT_UPSTREAM_HOST} {
+	header_up Host {$HOME_ASSISTANT_UPSTREAM_HOST}
+  }
 }
 
 nvr.{$CADDY_DOMAIN} {
@@ -93,7 +86,9 @@ nvr.{$CADDY_DOMAIN} {
 
   import auth
 
-  reverse_proxy {$FRIGATE_UPSTREAM_HOST}
+  reverse_proxy https://{$FRIGATE_UPSTREAM_HOST} {
+	header_up Host {$FRIGATE_UPSTREAM_HOST}
+  }
 }
 
 scrypted.{$CADDY_DOMAIN} {
@@ -101,7 +96,9 @@ scrypted.{$CADDY_DOMAIN} {
 
   import auth
 
-  reverse_proxy {$SCRYPTED_UPSTREAM_HOST}
+  reverse_proxy https://{$SCRYPTED_UPSTREAM_HOST} {
+	header_up Host {$SCRYPTED_UPSTREAM_HOST}
+  }
 }
 
 network.{$CADDY_DOMAIN} {
@@ -109,7 +106,7 @@ network.{$CADDY_DOMAIN} {
 
   import auth
 
-  reverse_proxy {$UNIFI_UPSTREAM_HOST} {
+  reverse_proxy https://{$UNIFI_UPSTREAM_HOST} {
     transport http {
       tls_insecure_skip_verify
     }

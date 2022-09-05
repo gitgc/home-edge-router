@@ -3,9 +3,10 @@ services:
     image: ghcr.io/gitgc/home-proxy-webserver:main
     container_name: home-proxy-webserver
     restart: unless-stopped
-    ports:
-      - "80:80"
-      - "443:443"
+    network_mode: host
+    #ports:
+    #  - "80:80"
+    #  - "443:443"
     environment:
       - CADDY_DOMAIN
       - CADDY_HEALTH_CHECK_URI
@@ -14,6 +15,7 @@ services:
       - FRIGATE_UPSTREAM_HOST
       - SCRYPTED_UPSTREAM_HOST
       - HOME_ASSISTANT_UPSTREAM_HOST
+      - UNIFI_UPSTREAM_HOST
       - GOOGLE_CLIENT_ID
       - GOOGLE_CLIENT_SECRET
       - JWT_SHARED_KEY
