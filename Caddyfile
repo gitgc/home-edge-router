@@ -27,6 +27,7 @@
 
       transform user {
         match realm google
+        suffix match email @{$CADDY_DOMAIN}
         action add role authp/user
         ui link "Home Assistant" https://home.{$CADDY_DOMAIN}/ icon "las la-home"
         ui link "Unifi" https://network.{$CADDY_DOMAIN}/ icon "las la-wifi"
