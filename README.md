@@ -6,7 +6,6 @@ This repository contains the configuration for my home edge/ingress load balance
 Requirements
 ------------
 * Docker
-* Docker Compose
 
 Steps
 -----
