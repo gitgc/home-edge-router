@@ -27,7 +27,7 @@ Before deploying, all the environment variables declared in the `.env` file with
 | `HOME_ASSISTANT_UPSTREAM_HOST` | The upstream hostname for the Home Assistant server         |
 | `UNIFI_UPSTREAM_HOST`          | The upstream IP for the Unifi OS Console                    |
 
-Naturally, the `_UPSTREAM_HOST` machines should be live and accessible first!
+Naturally, the `*_UPSTREAM_HOST` machines should be live and accessible first!
 
 Then:
 
