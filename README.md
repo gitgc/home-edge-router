@@ -3,7 +3,7 @@ home-edge-router
 
 This repository contains the configuration for my home edge/ingress load balancer, built on [Caddy](https://caddyserver.com/) and [`caddy-security`](https://github.com/greenpau/caddy-security). This provides HTTPS/SSL termination with valid letsencrypt.org certificate for private IP. Additionally, it protects access to its upstream services via oauth using the `caddy-security` Google SSO integration. Services can only be accessed if user can sign-in successfully via Google SSO using an email on my home domain. If user authenticates successfully, a `JWT` is issued granting access across the load balancer.
 
-Takes advantage of my own [`home-proxy-webserver`](https://github.com/gitgc/home-proxy-webserver) Caddy container that has the Digital Ocean DNS and `caddy-security` extensions pre-installed.
+Takes advantage of my own [`home-proxy-webserver` Caddy container](https://github.com/gitgc/home-proxy-webserver) that has the Digital Ocean DNS and `caddy-security` extensions pre-installed.
 
 Requirements
 ------------
