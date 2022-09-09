@@ -4,9 +4,7 @@ services:
     container_name: home-proxy-webserver
     restart: unless-stopped
     network_mode: host
-    #ports:
-    #  - "80:80"
-    #  - "443:443"
+    init: true
     environment:
       - CADDY_DOMAIN
       - CADDY_HEALTH_CHECK_URI
