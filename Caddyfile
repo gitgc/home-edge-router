@@ -64,10 +64,14 @@
   }
 }
 
-auth.{$CADDY_DOMAIN} {
+edge.{$CADDY_DOMAIN} {
   encode gzip
 
-  respond /caddy-health-check 200
+  respond /caddy-health-check "OK" 200
+}
+
+auth.{$CADDY_DOMAIN} {
+  encode gzip
 
   authenticate with myportal
 }
