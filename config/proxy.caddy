@@ -4,7 +4,7 @@ home.{$CADDY_DOMAIN} {
   import auth
 
   reverse_proxy https://{$HOME_ASSISTANT_UPSTREAM_HOST} {
-	header_up Host {$HOME_ASSISTANT_UPSTREAM_HOST}
+  header_up Host {$HOME_ASSISTANT_UPSTREAM_HOST}
   }
 }
 
@@ -14,7 +14,7 @@ nvr.{$CADDY_DOMAIN} {
   import auth
 
   reverse_proxy https://{$FRIGATE_UPSTREAM_HOST} {
-	header_up Host {$FRIGATE_UPSTREAM_HOST}
+  header_up Host {$FRIGATE_UPSTREAM_HOST}
   }
 }
 
@@ -24,7 +24,7 @@ scrypted.{$CADDY_DOMAIN} {
   import auth
 
   reverse_proxy https://{$SCRYPTED_UPSTREAM_HOST} {
-	header_up Host {$SCRYPTED_UPSTREAM_HOST}
+  header_up Host {$SCRYPTED_UPSTREAM_HOST}
   }
 }
 
