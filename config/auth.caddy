@@ -1,0 +1,23 @@
+(auth) {
+  @remote_host_filter {
+    not remote_ip 192.168.4.170
+    not remote_ip 192.168.1.124
+    not path /caddy-health-check
+  }
+
+  handle @remote_host_filter {
+    authorize with mypolicy
+  }
+}
+
+edge.{$CADDY_DOMAIN} {
+  encode gzip
+
+  respond /caddy-health-check "OK" 200
+}
+
+auth.{$CADDY_DOMAIN} {
+  encode gzip
+
+  authenticate with myportal
+}

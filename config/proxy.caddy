@@ -1,0 +1,41 @@
+home.{$CADDY_DOMAIN} {
+  encode gzip
+
+  import auth
+
+  reverse_proxy https://{$HOME_ASSISTANT_UPSTREAM_HOST} {
+	header_up Host {$HOME_ASSISTANT_UPSTREAM_HOST}
+  }
+}
+
+nvr.{$CADDY_DOMAIN} {
+  encode gzip
+
+  import auth
+
+  reverse_proxy https://{$FRIGATE_UPSTREAM_HOST} {
+	header_up Host {$FRIGATE_UPSTREAM_HOST}
+  }
+}
+
+scrypted.{$CADDY_DOMAIN} {
+  encode gzip
+
+  import auth
+
+  reverse_proxy https://{$SCRYPTED_UPSTREAM_HOST} {
+	header_up Host {$SCRYPTED_UPSTREAM_HOST}
+  }
+}
+
+network.{$CADDY_DOMAIN} {
+  encode gzip
+
+  import auth
+
+  reverse_proxy https://{$UNIFI_UPSTREAM_HOST} {
+    transport http {
+      tls_insecure_skip_verify
+    }
+  }
+}
