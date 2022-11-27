@@ -1,3 +1,18 @@
+edge.{$CADDY_DOMAIN} {
+  encode gzip
+  
+  respond /caddy-health-check 200
+  
+  rewrite /cockpit /cockpit/
+  reverse_proxy /cockpit/* https://host.docker.internal:9090 {
+    transport http {
+      tls_insecure_skip_verify
+    }
+  }
+
+  reverse_proxy {$CADDY_PROXY_UPSTREAM}
+}
+
 portainer.{$CADDY_DOMAIN} {
   encode gzip
 
