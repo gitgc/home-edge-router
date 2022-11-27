@@ -9,8 +9,6 @@ edge.{$CADDY_DOMAIN} {
       tls_insecure_skip_verify
     }
   }
-
-  reverse_proxy {$CADDY_PROXY_UPSTREAM}
 }
 
 portainer.{$CADDY_DOMAIN} {
