@@ -1,3 +1,15 @@
+portainer.{$CADDY_DOMAIN} {
+  encode gzip
+
+  import auth
+
+  reverse_proxy https://localhost:9443 {
+    transport http {
+      tls_insecure_skip_verify
+    }
+  }
+}
+
 home.{$CADDY_DOMAIN} {
   encode gzip
 

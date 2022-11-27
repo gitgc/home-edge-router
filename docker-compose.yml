@@ -7,6 +7,7 @@ services:
     init: true
     environment:
       - CADDY_DOMAIN
+      - CADDY_AUTH_DOMAIN
       - CADDY_HEALTH_CHECK_URI
       - CADDY_ADMIN
       - DO_AUTH_TOKEN
@@ -19,6 +20,9 @@ services:
       - JWT_SHARED_KEY
     volumes:
       - "./Caddyfile:/etc/caddy/Caddyfile:ro"
+      - "./config/security.caddy:/config/security.caddy:ro"
+      - "./config/proxy.caddy:/config/proxy.caddy:ro"
+      - "./config/auth.caddy:/config/auth.caddy:ro"
       - "./www:/var/www/html:ro"
       - "./data:/data"
       - "./config:/config"
@@ -30,8 +34,19 @@ services:
       timeout: 10s
       retries: 5
       start_period: 60s
-    depends_on:
-      - frigate
+
+  portainer-server:
+    image: portainer/portainer-ce:latest
+    container_name: portainer-server
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./portainer-data:/data
+    ports:
+      - 9443:9443
 
   watchtower:
     container_name: watchtower
