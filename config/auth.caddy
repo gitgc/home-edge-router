@@ -10,12 +10,6 @@
   }
 }
 
-edge.{$CADDY_DOMAIN} {
-  encode gzip
-
-  respond /caddy-health-check "OK" 200
-}
-
 auth.{$CADDY_DOMAIN} {
   encode gzip
 
