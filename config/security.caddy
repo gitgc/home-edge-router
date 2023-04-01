@@ -44,7 +44,7 @@ security {
 
     transform user {
       match realm google
-      match email {env.CADDY_ADMIN_U}
+      match email {env.CADDY_ADMIN_USER}
       action add role authp/admin
     }
   }
