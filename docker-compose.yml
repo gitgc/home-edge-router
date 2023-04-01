@@ -4,6 +4,8 @@ services:
     container_name: home-proxy-webserver
     restart: unless-stopped
     network_mode: host
+    # Uncomment to run the caddy formatter. Sometimes needed when version introduces formatting upgrade.
+    #entrypoint: caddy fmt /etc/caddy/Caddyfile --overwrite
     init: true
     environment:
       - CADDY_DOMAIN

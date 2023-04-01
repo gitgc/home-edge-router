@@ -1,3 +1,8 @@
+(cors) {
+	@origin header Origin {args}
+	header @origin Access-Control-Allow-Origin "{args}"
+}
+
 (auth) {
   @remote_host_filter {
     not remote_ip 192.168.4.170
@@ -13,5 +18,7 @@
 auth.{$CADDY_DOMAIN} {
   encode gzip
 
+  import cors auth.coia.io home.coia.io nvr.coia.io scrypted.coia.io
+  
   authenticate with myportal
 }

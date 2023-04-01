@@ -28,7 +28,7 @@ home.{$CADDY_DOMAIN} {
 
   import auth
 
-  reverse_proxy https://{$HOME_ASSISTANT_UPSTREAM_HOST} {
+  reverse_proxy http://{$HOME_ASSISTANT_UPSTREAM_HOST}:8123 {
   header_up Host {$HOME_ASSISTANT_UPSTREAM_HOST}
   }
 }

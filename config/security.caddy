@@ -34,7 +34,17 @@ security {
 
     transform user {
       match realm google
-      match email {env.CADDY_ADMIN}
+      match email gcoia@collectors.com
+      action add role authp/admin
+      ui link "Home Assistant" https://home.{$CADDY_DOMAIN}/ icon "las la-home"
+      ui link "Unifi" https://network.{$CADDY_DOMAIN}/ icon "las la-wifi"
+      ui link "Frigate" https://nvr.{$CADDY_DOMAIN}/ icon "las la-video"
+      ui link "Scrypted" https://scrypted.{$CADDY_DOMAIN}/ icon "las la-cogs"
+    }
+
+    transform user {
+      match realm google
+      match email {env.CADDY_ADMIN_U}
       action add role authp/admin
     }
   }
