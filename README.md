@@ -24,6 +24,7 @@ Before deploying, all the environment variables declared in the `.env` file with
 | `JWT_SHARED_KEY`               | A random unique value for the authentication JWT shared key |
 | `FRIGATE_UPSTREAM_HOST`        | The upstream hostname for the Frigate server                |
 | `SCRYPTED_UPSTREAM_HOST`       | The upstream hostname for the Scrypted server               |
+| `HIFI_UPSTREAM_HOST`           | The upstream hostname for the HifiBerry server              |
 | `HOME_ASSISTANT_UPSTREAM_HOST` | The upstream hostname for the Home Assistant server         |
 | `UNIFI_UPSTREAM_HOST`          | The upstream IP for the Unifi OS Console                    |
 

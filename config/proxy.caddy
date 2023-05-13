@@ -53,6 +53,16 @@ scrypted.{$CADDY_DOMAIN} {
   }
 }
 
+hifi.{$CADDY_DOMAIN} {
+  encode gzip
+
+  import auth
+
+  reverse_proxy https://{$HIFI_UPSTREAM_HOST} {
+  header_up Host {$HIFI_UPSTREAM_HOST}
+  }
+}
+
 network.{$CADDY_DOMAIN} {
   encode gzip
 
