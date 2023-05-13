@@ -1,6 +1,27 @@
 (cors) {
-	@origin header Origin {args}
-	header @origin Access-Control-Allow-Origin "{args}"
+  @cors_preflight{args.0} method OPTIONS
+  @cors{args.0} header Origin {args.0}
+
+  handle @cors_preflight{args.0} {
+    header {
+      Access-Control-Allow-Origin "{args.0}"
+      Access-Control-Allow-Methods "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+      Access-Control-Allow-Headers *
+      Access-Control-Allow-Credentials "true"
+      Access-Control-Max-Age "3600"
+      defer   #turn on defer on your header directive to make sure the new header values are set after proxying
+    }
+    respond "" 204
+  }
+
+  handle @cors{args.0} {
+    header {
+      Access-Control-Allow-Origin "{args.0}"
+      Access-Control-Expose-Headers *
+      Access-Control-Allow-Credentials "true"
+      defer
+    }
+  }
 }
 
 (auth) {
@@ -18,7 +39,11 @@
 auth.{$CADDY_DOMAIN} {
   encode gzip
 
-  import cors auth.coia.io home.coia.io nvr.coia.io scrypted.coia.io
-  
+  import cors https://auth.coia.io
+  import cors https://home.coia.io
+  import cors https://nvr.coia.io
+  import cors https://scrypted.coia.io
+  import cors https://hifi.coia.io
+
   authenticate with myportal
 }
