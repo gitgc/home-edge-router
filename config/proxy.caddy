@@ -58,7 +58,7 @@ hifi.{$CADDY_DOMAIN} {
 
   import auth
 
-  reverse_proxy https://{$HIFI_UPSTREAM_HOST} {
+  reverse_proxy http://{$HIFI_UPSTREAM_HOST} {
   header_up Host {$HIFI_UPSTREAM_HOST}
   }
 }
