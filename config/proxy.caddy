@@ -2,31 +2,12 @@ edge.{$CADDY_DOMAIN} {
   encode gzip
   
   respond /caddy-health-check 200
-  
-  rewrite /cockpit /cockpit/
-  reverse_proxy /cockpit/* https://host.docker.internal:9090 {
-    transport http {
-      tls_insecure_skip_verify
-    }
-  }
-}
-
-portainer.{$CADDY_DOMAIN} {
-  encode gzip
-
-  import auth
-
-  reverse_proxy https://localhost:9443 {
-    transport http {
-      tls_insecure_skip_verify
-    }
-  }
 }
 
 home.{$CADDY_DOMAIN} {
   encode gzip
 
-  import auth
+  #import auth
 
   reverse_proxy https://{$HOME_ASSISTANT_UPSTREAM_HOST} {
   header_up Host {$HOME_ASSISTANT_UPSTREAM_HOST}
@@ -36,37 +17,15 @@ home.{$CADDY_DOMAIN} {
 nvr.{$CADDY_DOMAIN} {
   encode gzip
 
-  import auth
+  #import auth
 
   reverse_proxy https://{$FRIGATE_UPSTREAM_HOST} {
   header_up Host {$FRIGATE_UPSTREAM_HOST}
   }
 }
 
-scrypted.{$CADDY_DOMAIN} {
-  encode gzip
-
-  import auth
-
-  reverse_proxy https://{$SCRYPTED_UPSTREAM_HOST} {
-  header_up Host {$SCRYPTED_UPSTREAM_HOST}
-  }
-}
-
-hifi.{$CADDY_DOMAIN} {
-  encode gzip
-
-  import auth
-
-  reverse_proxy http://{$HIFI_UPSTREAM_HOST} {
-  header_up Host {$HIFI_UPSTREAM_HOST}
-  }
-}
-
 network.{$CADDY_DOMAIN} {
   encode gzip
-
-  import auth
 
   reverse_proxy https://{$UNIFI_UPSTREAM_HOST} {
     transport http {
