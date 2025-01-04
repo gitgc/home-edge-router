@@ -3,10 +3,16 @@ services:
     image: ghcr.io/gitgc/home-proxy-webserver:main
     container_name: home-proxy-webserver
     restart: unless-stopped
-    network_mode: host
+    #network_mode: host
+    ports:
+      - 80:80/tcp
+      - 443:443/tcp
+    extra_hosts:
+      - "nvr.coia.io:192.168.6.87"
+      - "ha.internal.coia.io:192.168.1.228"
     # Uncomment to run the caddy formatter. Sometimes needed when version introduces formatting upgrade.
     #entrypoint: caddy fmt /etc/caddy/Caddyfile --overwrite
-    init: true
+    #init: true
     environment:
       - CADDY_DOMAIN
       #- CADDY_AUTH_DOMAIN
@@ -28,12 +34,12 @@ services:
       #- "./config/auth.caddy:/config/auth.caddy:ro"
       - "./www:/var/www/html:ro"
       - "./data:/data"
-      - "./config:/config"
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    healthcheck:
-      test: [ "CMD", "wget", "--spider", "${CADDY_HEALTH_CHECK_URI}" ]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 60s
+      #- "./config:/config"
+    #extra_hosts:
+      #- "host.docker.internal:host-gateway"
+    #healthcheck:
+    #  test: [ "CMD", "wget", "--spider", "${CADDY_HEALTH_CHECK_URI}" ]
+    #  interval: 30s
+    #  timeout: 10s
+    #  retries: 5
+    #  start_period: 60s
