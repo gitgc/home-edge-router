@@ -1,9 +1,10 @@
 {
+        email g@coia.io
 	acme_dns digitalocean {env.DO_AUTH_TOKEN}
 
-	import /config/security.caddy
+	#import /config/security.caddy
 }
 
-import /config/auth.caddy
+#import /config/auth.caddy
 
 import /config/proxy.caddy

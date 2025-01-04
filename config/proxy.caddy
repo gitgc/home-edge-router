@@ -6,22 +6,28 @@ edge.{$CADDY_DOMAIN} {
 
 home.{$CADDY_DOMAIN} {
   encode gzip
-
-  #import auth
-
+  
   reverse_proxy https://{$HOME_ASSISTANT_UPSTREAM_HOST} {
   header_up Host {$HOME_ASSISTANT_UPSTREAM_HOST}
   }
 }
 
-nvr.{$CADDY_DOMAIN} {
+cam.{$CADDY_DOMAIN} {
   encode gzip
 
-  #import auth
-
   reverse_proxy https://{$FRIGATE_UPSTREAM_HOST} {
-  header_up Host {$FRIGATE_UPSTREAM_HOST}
+    header_up Host {$FRIGATE_UPSTREAM_HOST}
   }
+}
+
+uptime.{$CADDY_DOMAIN} {
+  encode gzip
+  reverse_proxy http://{$HOME_ASSISTANT_UPSTREAM_HOST}:3001
+ }
+
+music.{$CADDY_DOMAIN} {
+  encode gzip
+  reverse_proxy http://{$HOME_ASSISTANT_UPSTREAM_HOST}:8095
 }
 
 network.{$CADDY_DOMAIN} {
