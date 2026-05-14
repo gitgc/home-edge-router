@@ -1,5 +1,5 @@
 {
-        email g@coia.io
+	email g@coia.io
 	acme_dns cloudflare {env.CF_AUTH_TOKEN}
 }
 
