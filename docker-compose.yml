@@ -3,40 +3,24 @@ services:
     image: ghcr.io/gitgc/home-proxy-webserver:main
     container_name: home-proxy-webserver
     restart: unless-stopped
-    #network_mode: host
     ports:
       - 80:80/tcp
       - 443:443/tcp
     extra_hosts:
-      - "nvr.coia.io:192.168.6.87"
+      - "nvr.coia.io:192.168.1.86"
       - "ha.internal.coia.io:192.168.1.228"
-    # Uncomment to run the caddy formatter. Sometimes needed when version introduces formatting upgrade.
-    #entrypoint: caddy fmt /etc/caddy/Caddyfile --overwrite
-    #init: true
     environment:
       - CADDY_DOMAIN
-      #- CADDY_AUTH_DOMAIN
       - CADDY_HEALTH_CHECK_URI
-      #- CADDY_ADMIN_USER
-      - DO_AUTH_TOKEN
+      - CF_AUTH_TOKEN
       - FRIGATE_UPSTREAM_HOST
-      #- SCRYPTED_UPSTREAM_HOST
       - HOME_ASSISTANT_UPSTREAM_HOST
-      #- HIFI_UPSTREAM_HOST
       - UNIFI_UPSTREAM_HOST
-      #- GOOGLE_CLIENT_ID
-      #- GOOGLE_CLIENT_SECRET
-      #- JWT_SHARED_KEY
     volumes:
       - "./Caddyfile:/etc/caddy/Caddyfile:ro"
-      #- "./config/security.caddy:/config/security.caddy:ro"
       - "./config/proxy.caddy:/config/proxy.caddy:ro"
-      #- "./config/auth.caddy:/config/auth.caddy:ro"
       - "./www:/var/www/html:ro"
       - "./data:/data"
-      #- "./config:/config"
-    #extra_hosts:
-      #- "host.docker.internal:host-gateway"
     #healthcheck:
     #  test: [ "CMD", "wget", "--spider", "${CADDY_HEALTH_CHECK_URI}" ]
     #  interval: 30s
