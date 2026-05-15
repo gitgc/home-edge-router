@@ -5,9 +5,8 @@ x-health-check-defaults: &health_check_defaults
   start_period: 60s
 
 services:
-  home-proxy-webserver:
+  caddy:
     image: ghcr.io/gitgc/home-proxy-webserver:main
-    container_name: home-proxy-webserver
     restart: unless-stopped
     ports:
       - 80:80/tcp
@@ -26,7 +25,7 @@ services:
       - PLEX_UPSTREAM_HOST
     volumes:
       - "./Caddyfile:/etc/caddy/Caddyfile:ro"
-      - "./config/proxy.caddy:/config/proxy.caddy:ro"
+      - "./caddy/proxy.caddy:/config/proxy.caddy:ro"
       - "./www:/var/www/html:ro"
       - "./data:/data"
     healthcheck:
@@ -37,13 +36,12 @@ services:
 
   haproxy:
     image: haproxy:lts-alpine
-    container_name: haproxy
     restart: unless-stopped
     ports:
       - 554:554/tcp
       - 8554:8554/tcp
     volumes:
-      - "./config/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro"
+      - "./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro"
     healthcheck:
       <<: *health_check_defaults
       test: [ "CMD", "haproxy", "-c", "-f", "/usr/local/etc/haproxy/haproxy.cfg" ]
