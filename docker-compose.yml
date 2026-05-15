@@ -23,6 +23,7 @@ services:
       - FRIGATE_UPSTREAM_HOST
       - HOME_ASSISTANT_UPSTREAM_HOST
       - UNIFI_UPSTREAM_HOST
+      - PLEX_UPSTREAM_HOST
     volumes:
       - "./Caddyfile:/etc/caddy/Caddyfile:ro"
       - "./config/proxy.caddy:/config/proxy.caddy:ro"
