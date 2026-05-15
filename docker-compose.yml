@@ -35,6 +35,21 @@ services:
     labels:
       autoheal-app: true
 
+  haproxy:
+    image: haproxy:lts-alpine
+    container_name: haproxy
+    restart: unless-stopped
+    ports:
+      - 554:554/tcp
+      - 8554:8554/tcp
+    volumes:
+      - "./config/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro"
+    healthcheck:
+      <<: *health_check_defaults
+      test: [ "CMD", "haproxy", "-c", "-f", "/usr/local/etc/haproxy/haproxy.cfg" ]
+    labels:
+      autoheal-app: true
+
   autoheal:
     image: willfarrell/autoheal:latest
     network_mode: none
