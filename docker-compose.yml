@@ -38,7 +38,6 @@ services:
     image: haproxy:lts-alpine
     restart: unless-stopped
     ports:
-      - 554:554/tcp
       - 8554:8554/tcp
       - 8555:8555/tcp
     volumes:
