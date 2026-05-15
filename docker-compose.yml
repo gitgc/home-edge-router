@@ -34,13 +34,19 @@ services:
     labels:
       autoheal-app: true
 
+  webrtc-udp:
+    image: alpine/socat:latest
+    restart: unless-stopped
+    command: UDP-LISTEN:8555,fork,reuseaddr UDP:192.168.1.86:8555
+    ports:
+      - 8555:8555/udp
+
   haproxy:
     image: haproxy:lts-alpine
     restart: unless-stopped
     ports:
       - 8554:8554/tcp
       - 8555:8555/tcp
-      - 8555:8555/udp
     volumes:
       - "./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro"
     healthcheck:
