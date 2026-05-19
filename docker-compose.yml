@@ -56,20 +56,33 @@ services:
     labels:
       autoheal-app: true
 
-  cockpit:
-    image: cockpit/ws:latest
-    expose:
-      - "9090"
-    # Needs access to the underlying host
-    privileged: true
-    pid: "host"
-    environment:
-      - CADDY_DOMAIN
-      - VIRTUAL_HOST=edge.${CADDY_DOMAIN}
-      - VIRTUAL_PORT=9090
-      - CERT_NAME=default
+  netdata:
+    image: netdata/netdata
+    container_name: netdata
+    pid: host
+    network_mode: host
+    restart: unless-stopped
+    cap_add:
+      - SYS_PTRACE
+      - SYS_ADMIN
+    security_opt:
+      - apparmor:unconfined
     volumes:
-      - "/:/host"
+      - netdataconfig:/etc/netdata
+      - netdatalib:/var/lib/netdata
+      - netdatacache:/var/cache/netdata
+      - /:/host/root:ro,rslave
+      - /etc/passwd:/host/etc/passwd:ro
+      - /etc/group:/host/etc/group:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /etc/os-release:/host/etc/os-release:ro
+      - /var/log:/host/var/log:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    healthcheck:
+      <<: *health_check_defaults
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:19999/api/v1/info" ]
 
   autoheal:
     image: willfarrell/autoheal:latest
@@ -80,3 +93,10 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock
+
+volumes:
+  caddy_data:
+  caddy_config:
+  netdataconfig:
+  netdatalib:
+  netdatacache:
