@@ -73,9 +73,8 @@ services:
     security_opt:
       - apparmor:unconfined
     volumes:
-      - netdataconfig:/etc/netdata
-      - netdatalib:/var/lib/netdata
-      - netdatacache:/var/cache/netdata
+      - ./netdata/config:/etc/netdata
+      - ./netdata/lib:/var/lib/netdata
       - /:/host/root:ro,rslave
       - /etc/passwd:/host/etc/passwd:ro
       - /etc/group:/host/etc/group:ro
@@ -85,6 +84,8 @@ services:
       - /etc/os-release:/host/etc/os-release:ro
       - /var/log:/host/var/log:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
+    tmpfs:
+      - /var/cache/netdata:size=512m
     healthcheck:
       <<: *health_check_defaults
       test: [ "CMD", "curl", "-f", "http://localhost:19999/api/v1/info" ]
@@ -100,10 +101,3 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock
-
-volumes:
-  caddy_data:
-  caddy_config:
-  netdataconfig:
-  netdatalib:
-  netdatacache:
