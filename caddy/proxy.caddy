@@ -2,6 +2,14 @@ edge.{$CADDY_DOMAIN} {
 	encode gzip
 
 	respond /caddy-health-check 200
+
+		rewrite /cockpit /cockpit/
+
+	reverse_proxy /cockpit/* https://host.docker.internal:9090 {
+		transport http {
+			tls_insecure_skip_verify
+		}
+	}
 }
 
 home.{$CADDY_DOMAIN} {
@@ -22,23 +30,28 @@ cam.{$CADDY_DOMAIN} {
 
 uptime.{$CADDY_DOMAIN} {
 	encode gzip
+
 	reverse_proxy http://{$HOME_ASSISTANT_UPSTREAM_HOST}:3001
 }
 
 music.{$CADDY_DOMAIN} {
 	encode gzip
+
 	reverse_proxy http://{$HOME_ASSISTANT_UPSTREAM_HOST}:8095
 }
 
 plex.{$CADDY_DOMAIN} {
 	encode gzip
+
 	reverse_proxy http://{$PLEX_UPSTREAM_HOST}:32400
 }
 
 network.{$CADDY_DOMAIN} {
 	encode gzip
+
 	reverse_proxy https://{$UNIFI_UPSTREAM_HOST}:443 {
 		header_up Host {hostport}
+
 		transport http {
 			tls_insecure_skip_verify
 		}

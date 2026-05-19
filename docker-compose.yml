@@ -13,6 +13,7 @@ services:
       - 443:443/tcp
       - 443:443/udp
     extra_hosts:
+      - "host.docker.internal:host-gateway"
       - "nvr.coia.io:192.168.1.86"
       - "ha.internal.coia.io:192.168.1.228"
     environment:
@@ -54,6 +55,21 @@ services:
       test: [ "CMD", "haproxy", "-c", "-f", "/usr/local/etc/haproxy/haproxy.cfg" ]
     labels:
       autoheal-app: true
+
+  cockpit:
+    image: cockpit/ws:latest
+    expose:
+      - "9090"
+    # Needs access to the underlying host
+    privileged: true
+    pid: "host"
+    environment:
+      - CADDY_DOMAIN
+      - VIRTUAL_HOST=edge.${CADDY_DOMAIN}
+      - VIRTUAL_PORT=9090
+      - CERT_NAME=default
+    volumes:
+      - "/:/host"
 
   autoheal:
     image: willfarrell/autoheal:latest
