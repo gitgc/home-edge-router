@@ -62,6 +62,11 @@ services:
     pid: host
     network_mode: host
     restart: unless-stopped
+    environment:
+        - NETDATA_CLAIM_TOKEN
+        - NETDATA_CLAIM_URL
+        - NETDATA_CLAIM_ROOMS
+        - DISABLE_TELEMETRY=1
     cap_add:
       - SYS_PTRACE
       - SYS_ADMIN
