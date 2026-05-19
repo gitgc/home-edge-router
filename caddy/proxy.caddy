@@ -4,7 +4,7 @@ edge.{$CADDY_DOMAIN} {
 	respond /caddy-health-check 200
 }
 
-netdata.{$CADDY_DOMAIN} {
+netdata.edge.{$CADDY_DOMAIN} {
 	encode gzip
 
 	reverse_proxy host.docker.internal:19999
