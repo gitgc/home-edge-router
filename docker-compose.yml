@@ -4,6 +4,12 @@ x-health-check-defaults: &health_check_defaults
   retries: 5
   start_period: 60s
 
+x-default-logging: &default_logging
+  driver: "json-file"
+  options:
+    max-size: "10m"
+    max-file: "3"
+
 services:
   caddy:
     image: ghcr.io/gitgc/home-proxy-webserver:main
@@ -29,6 +35,8 @@ services:
       - "./caddy/proxy.caddy:/config/proxy.caddy:ro"
       - "./www:/var/www/html:ro"
       - "./data:/data"
+    logging:
+      <<: *default_logging
     healthcheck:
       <<: *health_check_defaults
       test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "${CADDY_HEALTH_CHECK_URI}" ]
@@ -50,6 +58,8 @@ services:
       - 8555:8555/tcp
     volumes:
       - "./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro"
+    logging:
+      <<: *default_logging
     healthcheck:
       <<: *health_check_defaults
       test: [ "CMD", "haproxy", "-c", "-f", "/usr/local/etc/haproxy/haproxy.cfg" ]
@@ -86,6 +96,8 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     tmpfs:
       - /var/cache/netdata:size=512m
+    logging:
+      <<: *default_logging
     healthcheck:
       <<: *health_check_defaults
       test: [ "CMD", "curl", "-f", "http://localhost:19999/api/v1/info" ]
@@ -98,6 +110,8 @@ services:
     restart: unless-stopped
     environment:
       AUTOHEAL_CONTAINER_LABEL: autoheal-app
+    logging:
+      <<: *default_logging
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock
