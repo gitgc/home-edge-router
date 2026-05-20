@@ -1,2 +1,4 @@
 config/.auth.caddy.swp
 .env
+netdata/
+
