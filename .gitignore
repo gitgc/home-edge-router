@@ -2,3 +2,4 @@ config/.auth.caddy.swp
 .env
 netdata/
 
+.DS_Store
