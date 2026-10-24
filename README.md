@@ -25,11 +25,15 @@ Copy `.env.example` to `.env` and replace all `CHANGE_ME` values:
 | `CADDY_DOMAIN`                 | Primary domain (must be managed in Cloudflare DNS)                 |
 | `CADDY_HEALTH_CHECK_URI`       | URI Caddy uses for its own health check                            |
 | `CF_AUTH_TOKEN`                | Cloudflare API token for ACME DNS challenge                        |
-| `CF_ZONE_ID`                   | Cloudflare Zone ID for the domain                                  |
 | `FRIGATE_UPSTREAM_HOST`        | Hostname for the Frigate NVR server                                |
+| `FRIGATE_UPSTREAM_IP`          | LAN IP of the Frigate NVR server (host mapping + RTSP/WebRTC relay) |
 | `HOME_ASSISTANT_UPSTREAM_HOST` | Hostname for the Home Assistant server                             |
+| `HOME_ASSISTANT_UPSTREAM_IP`   | LAN IP of the Home Assistant server (host mapping)                 |
 | `UNIFI_UPSTREAM_HOST`          | Hostname or IP for the Unifi OS Console                            |
 | `PLEX_UPSTREAM_HOST`           | Hostname or IP for the Plex Media Server                           |
+| `NETDATA_CLAIM_URL`            | Netdata Cloud claim URL                                            |
+| `NETDATA_CLAIM_TOKEN`          | Netdata Cloud claim token                                          |
+| `NETDATA_CLAIM_ROOMS`          | Netdata Cloud room ID(s) to join                                   |
 
 Then start the stack:
 
@@ -55,6 +59,6 @@ docker compose up -d
 
 | Port / Protocol | Destination              | Description       |
 | --------------- | ------------------------ | ----------------- |
-| `8554 TCP`      | `$FRIGATE_UPSTREAM_HOST:8554` | RTSP streaming |
-| `8555 TCP`      | `$FRIGATE_UPSTREAM_HOST:8555` | WebRTC TCP     |
-| `8555 UDP`      | `$FRIGATE_UPSTREAM_HOST:8555` | WebRTC UDP     |
+| `8554 TCP`      | `$FRIGATE_UPSTREAM_IP:8554` | RTSP streaming |
+| `8555 TCP`      | `$FRIGATE_UPSTREAM_IP:8555` | WebRTC TCP     |
+| `8555 UDP`      | `$FRIGATE_UPSTREAM_IP:8555` | WebRTC UDP     |
