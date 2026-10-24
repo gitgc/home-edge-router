@@ -20,8 +20,8 @@ services:
       - 443:443/udp
     extra_hosts:
       - "host.docker.internal:host-gateway"
-      - "nvr.coia.io:192.168.1.86"
-      - "ha.internal.coia.io:192.168.1.228"
+      - "${FRIGATE_UPSTREAM_HOST}:${FRIGATE_UPSTREAM_IP}"
+      - "${HOME_ASSISTANT_UPSTREAM_HOST}:${HOME_ASSISTANT_UPSTREAM_IP}"
     environment:
       - CADDY_DOMAIN
       - CADDY_HEALTH_CHECK_URI
@@ -46,9 +46,11 @@ services:
   webrtc-udp:
     image: alpine/socat:latest
     restart: unless-stopped
-    command: UDP-LISTEN:8555,fork,reuseaddr UDP:192.168.1.86:8555
+    command: UDP-LISTEN:8555,fork,reuseaddr UDP:${FRIGATE_UPSTREAM_IP}:8555
     ports:
       - 8555:8555/udp
+    logging:
+      <<: *default_logging
 
   haproxy:
     image: haproxy:lts-alpine
@@ -56,6 +58,8 @@ services:
     ports:
       - 8554:8554/tcp
       - 8555:8555/tcp
+    environment:
+      - FRIGATE_UPSTREAM_IP
     volumes:
       - "./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro"
     logging:
