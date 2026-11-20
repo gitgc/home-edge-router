@@ -14,6 +14,7 @@ services:
   caddy:
     image: ghcr.io/gitgc/home-proxy-webserver:main
     restart: unless-stopped
+    init: true
     ports:
       - 80:80/tcp
       - 443:443/tcp
@@ -46,7 +47,7 @@ services:
   webrtc-udp:
     image: alpine/socat:latest
     restart: unless-stopped
-    command: UDP-LISTEN:8555,fork,reuseaddr UDP:${FRIGATE_UPSTREAM_IP}:8555
+    command: -T 30 UDP-LISTEN:8555,fork,reuseaddr UDP:${FRIGATE_UPSTREAM_IP}:8555
     ports:
       - 8555:8555/udp
     logging:
