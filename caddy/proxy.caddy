@@ -1,17 +1,17 @@
 edge.{$CADDY_DOMAIN} {
-	encode gzip
+	encode zstd gzip
 
 	respond /caddy-health-check 200
 }
 
 netdata.edge.{$CADDY_DOMAIN} {
-	encode gzip
+	encode zstd gzip
 
 	reverse_proxy host.docker.internal:19999
 }
 
 home.{$CADDY_DOMAIN} {
-	encode gzip
+	encode zstd gzip
 
 	reverse_proxy https://{$HOME_ASSISTANT_UPSTREAM_HOST} {
 		header_up Host {$HOME_ASSISTANT_UPSTREAM_HOST}
@@ -19,7 +19,7 @@ home.{$CADDY_DOMAIN} {
 }
 
 cam.{$CADDY_DOMAIN} {
-	encode gzip
+	encode zstd gzip
 
 	reverse_proxy https://{$FRIGATE_UPSTREAM_HOST} {
 		header_up Host {$FRIGATE_UPSTREAM_HOST}
@@ -27,25 +27,25 @@ cam.{$CADDY_DOMAIN} {
 }
 
 uptime.{$CADDY_DOMAIN} {
-	encode gzip
+	encode zstd gzip
 
 	reverse_proxy http://{$HOME_ASSISTANT_UPSTREAM_HOST}:3001
 }
 
 music.{$CADDY_DOMAIN} {
-	encode gzip
+	encode zstd gzip
 
 	reverse_proxy http://{$HOME_ASSISTANT_UPSTREAM_HOST}:8095
 }
 
 plex.{$CADDY_DOMAIN} {
-	encode gzip
+	encode zstd gzip
 
 	reverse_proxy http://{$PLEX_UPSTREAM_HOST}:32400
 }
 
 network.{$CADDY_DOMAIN} {
-	encode gzip
+	encode zstd gzip
 
 	reverse_proxy https://{$UNIFI_UPSTREAM_HOST}:443 {
 		header_up Host {hostport}
